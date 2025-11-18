@@ -17,7 +17,7 @@ import { execa } from 'execa';
  */
 function getTemplateDir(): string {
   const currentDir = getDirname(import.meta.url);
-  return path.join(currentDir, '..', '..', 'templates');
+  return path.join(currentDir, 'templates');
 }
 
 /**
@@ -66,9 +66,7 @@ export async function initProject(
 
     // Update package.json with project name
     const packageJsonPath = path.join(projectDir, 'package.json');
-    const packageJson = await import('fs-extra').then((fs) =>
-      fs.readJSON(packageJsonPath)
-    );
+    const packageJson = await import('fs-extra').then((fs) => fs.readJSON(packageJsonPath));
     packageJson.name = name;
     await writeJSON(packageJsonPath, packageJson);
 
@@ -92,8 +90,7 @@ export async function initProject(
 
     // Install dependencies
     if (!options.skipInstall) {
-      const packageManager =
-        options.packageManager ?? (await promptPackageManager());
+      const packageManager = options.packageManager ?? (await promptPackageManager());
 
       logger.info(`Installing dependencies with ${packageManager}...`);
       try {

@@ -51,7 +51,7 @@ export async function copy(src: string, dest: string): Promise<void> {
 /**
  * Read a JSON file
  */
-export async function readJSON<T = unknown>(filePath: string): Promise<T> {
+export async function readJSON<T = any>(filePath: string): Promise<T> {
   return fs.readJSON(filePath) as Promise<T>;
 }
 

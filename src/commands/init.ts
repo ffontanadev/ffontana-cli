@@ -8,7 +8,7 @@ import {
   promptPackageManager,
   promptConfirm,
 } from '../utils/index.js';
-import { copy, ensureDir, isEmptyDir, writeJSON, getDirname } from '../utils/index.js';
+import { copy, ensureDir, isEmptyDir, readJSON, writeJSON, getDirname } from '../utils/index.js';
 import { installDependencies } from '../utils/index.js';
 import { execa } from 'execa';
 
@@ -66,9 +66,7 @@ export async function initProject(
 
     // Update package.json with project name
     const packageJsonPath = path.join(projectDir, 'package.json');
-    const packageJson = await import('fs-extra').then(
-      async (fs) => await fs.readJSON(packageJsonPath)
-    );
+    const packageJson = await readJSON(packageJsonPath);
     packageJson.name = name;
     await writeJSON(packageJsonPath, packageJson);
 

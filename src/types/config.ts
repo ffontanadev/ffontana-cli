@@ -23,10 +23,44 @@ export const ComponentGeneratorConfigSchema = z.object({
 export type ComponentGeneratorConfig = z.infer<typeof ComponentGeneratorConfigSchema>;
 
 /**
+ * Hook generator configuration
+ */
+export const HookGeneratorConfigSchema = z.object({
+  typescript: z.boolean().default(true),
+  test: z.boolean().default(true),
+});
+
+export type HookGeneratorConfig = z.infer<typeof HookGeneratorConfigSchema>;
+
+/**
+ * Page generator configuration (Next.js)
+ */
+export const PageGeneratorConfigSchema = z.object({
+  style: z.enum(['css', 'scss', 'tailwind', 'css-modules']).default('css-modules'),
+  typescript: z.boolean().default(true),
+  test: z.boolean().default(true),
+});
+
+export type PageGeneratorConfig = z.infer<typeof PageGeneratorConfigSchema>;
+
+/**
+ * Element generator configuration (Lit)
+ */
+export const ElementGeneratorConfigSchema = z.object({
+  typescript: z.boolean().default(true),
+  test: z.boolean().default(true),
+});
+
+export type ElementGeneratorConfig = z.infer<typeof ElementGeneratorConfigSchema>;
+
+/**
  * All generators configuration
  */
 export const GeneratorsConfigSchema = z.object({
   component: ComponentGeneratorConfigSchema.optional(),
+  hook: HookGeneratorConfigSchema.optional(),
+  page: PageGeneratorConfigSchema.optional(),
+  element: ElementGeneratorConfigSchema.optional(),
 });
 
 export type GeneratorsConfig = z.infer<typeof GeneratorsConfigSchema>;
@@ -49,6 +83,7 @@ export const TemplatesConfigSchema = z.object({
   component: z.string().optional(),
   hook: z.string().optional(),
   page: z.string().optional(),
+  element: z.string().optional(),
 });
 
 export type TemplatesConfig = z.infer<typeof TemplatesConfigSchema>;

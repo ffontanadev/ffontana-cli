@@ -56,6 +56,40 @@ export interface ComponentGenerateOptions extends GenerateCommandOptions {
 }
 
 /**
+ * Hook generation options
+ */
+export interface HookGenerateOptions extends GenerateCommandOptions {
+  /** Generate test file */
+  test?: boolean;
+  /** Use TypeScript */
+  typescript?: boolean;
+}
+
+/**
+ * Page generation options (Next.js)
+ */
+export interface PageGenerateOptions extends GenerateCommandOptions {
+  /** Style format */
+  style?: 'css' | 'scss' | 'tailwind' | 'css-modules';
+  /** Generate test file */
+  test?: boolean;
+  /** Use TypeScript */
+  typescript?: boolean;
+  /** Dynamic route segment */
+  dynamic?: boolean;
+}
+
+/**
+ * Element generation options (Lit)
+ */
+export interface ElementGenerateOptions extends GenerateCommandOptions {
+  /** Generate test file */
+  test?: boolean;
+  /** Use TypeScript */
+  typescript?: boolean;
+}
+
+/**
  * Config command options
  */
 export interface ConfigCommandOptions extends CommonCommandOptions {

@@ -1,0 +1,44 @@
+{{#if (eq style 'css-modules')}}
+import styles from './page.module.css';
+{{else if (eq style 'css')}}
+import './page.css';
+{{else if (eq style 'scss')}}
+import './page.scss';
+{{/if}}
+
+{{#if typescript}}
+interface {{name}}PageProps {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+{{/if}}
+
+{{#if typescript}}
+export default function {{name}}Page({ params, searchParams }: {{name}}PageProps) {
+{{else}}
+export default function {{name}}Page({ params, searchParams }) {
+{{/if}}
+  return (
+{{#if (eq style 'css-modules')}}
+    <div className={styles.container}>
+{{else if (eq style 'tailwind')}}
+    <div className="container mx-auto p-8">
+{{else}}
+    <div className="{{kebabCase name}}-page">
+{{/if}}
+      <h1>{{name}} Page</h1>
+      <p>Welcome to the {{name}} page.</p>
+    </div>
+  );
+}
+
+{{#if typescript}}
+export async function generateMetadata({ params }: {{name}}PageProps) {
+{{else}}
+export async function generateMetadata({ params }) {
+{{/if}}
+  return {
+    title: '{{name}}',
+    description: '{{name}} page description',
+  };
+}

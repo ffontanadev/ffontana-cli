@@ -23,7 +23,7 @@ export async function detectProject(cwd: string = process.cwd()): Promise<Projec
     ...packageJson.devDependencies,
   };
 
-  // Detect framework
+  // Detect framework (order matters: Next.js before React, as Next.js uses React)
   let framework: ProjectInfo['framework'] = 'unknown';
   let version: string | undefined;
 

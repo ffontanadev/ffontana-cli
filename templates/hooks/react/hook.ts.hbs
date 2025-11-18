@@ -1,0 +1,44 @@
+import { useState, useEffect } from 'react';
+
+{{#if typescript}}
+interface {{name}}Options {
+  initialValue?: unknown;
+}
+
+interface {{name}}Return {
+  value: unknown;
+  setValue: (value: unknown) => void;
+  reset: () => void;
+}
+{{/if}}
+
+{{#if typescript}}
+export function {{camelCase name}}(options: {{name}}Options = {}): {{name}}Return {
+{{else}}
+export function {{camelCase name}}(options = {}) {
+{{/if}}
+  const { initialValue } = options;
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    // Add your effect logic here
+    console.log('{{name}} mounted');
+
+    return () => {
+      // Cleanup logic
+      console.log('{{name}} unmounted');
+    };
+  }, []);
+
+  const reset = () => {
+    setValue(initialValue);
+  };
+
+  return {
+    value,
+    setValue,
+    reset,
+  };
+}
+
+export default {{camelCase name}};

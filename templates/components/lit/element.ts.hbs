@@ -1,0 +1,33 @@
+import { LitElement, html, css } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+
+@customElement('{{kebabCase name}}')
+export class {{name}} extends LitElement {
+  @property({ type: String })
+  message = 'Hello from {{name}}';
+
+  // External stylesheet will be loaded
+  static styles = css`
+    @import url('./{{name}}.css');
+
+    :host {
+      display: block;
+    }
+  `;
+
+  render() {
+    return html`
+      <div class="container">
+        <h2>{{name}} Element</h2>
+        <p>\${this.message}</p>
+        <slot></slot>
+      </div>
+    `;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    '{{kebabCase name}}': {{name}};
+  }
+}

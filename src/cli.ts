@@ -4,6 +4,10 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { registerInitCommand } from './commands/init.js';
 import { registerGenerateCommand } from './commands/generate/index.js';
+import { registerConfigCommand } from './commands/config.js';
+import { registerLintCommand } from './commands/tasks/lint.js';
+import { registerFormatCommand } from './commands/tasks/format.js';
+import { registerTestCommand } from './commands/tasks/test.js';
 
 // Get package.json for version
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -27,6 +31,12 @@ program
 // Register commands
 registerInitCommand(program);
 registerGenerateCommand(program);
+registerConfigCommand(program);
+
+// Register task commands
+registerLintCommand(program);
+registerFormatCommand(program);
+registerTestCommand(program);
 
 // Parse arguments
 program.parse();

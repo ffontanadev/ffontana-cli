@@ -28,19 +28,19 @@ A flexible, extensible command-line tool that unifies repetitive development tas
 ### Global Installation
 
 ```bash
-npm install -g ff-cli
+npm install -g ffontana-cli
 ```
 
 ### Use with npx (no installation needed)
 
 ```bash
-npx ff-cli init my-app
+npx ffontana-cli init my-app
 ```
 
 ### Project-local installation
 
 ```bash
-npm install --save-dev ff-cli
+npm install --save-dev ffontana-cli
 ```
 
 ## 🚀 Quick Start

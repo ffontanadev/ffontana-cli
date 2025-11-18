@@ -5,11 +5,7 @@ import { detectProject } from '../../core/index.js';
 import { loadConfig } from '../../core/index.js';
 import { renderTemplateToFile } from '../../core/index.js';
 import { logger } from '../../utils/index.js';
-import {
-  promptComponentName,
-  promptComponentOptions,
-  promptOverwrite,
-} from '../../utils/index.js';
+import { promptComponentName, promptComponentOptions, promptOverwrite } from '../../utils/index.js';
 import { fileExists, getDirname } from '../../utils/index.js';
 
 /**
@@ -35,7 +31,7 @@ function getTemplateDir(): string {
   // In production, templates are copied to dist/templates
   // In development, they're in the source templates folder
   const currentDir = getDirname(import.meta.url);
-  return path.join(currentDir, '..', '..', '..', 'templates');
+  return path.join(currentDir, 'templates');
 }
 
 /**
@@ -130,10 +126,7 @@ export async function generateComponent(
 
     // Generate test file
     if (componentOptions.test) {
-      const testTemplatePath = path.join(
-        frameworkTemplateDir,
-        `component.test.${ext}.hbs`
-      );
+      const testTemplatePath = path.join(frameworkTemplateDir, `component.test.${ext}.hbs`);
       const testOutputPath = path.join(componentDir, `${componentName}.test.${ext}`);
 
       if (await fileExists(testTemplatePath)) {
@@ -144,14 +137,8 @@ export async function generateComponent(
 
     // Generate story file
     if (componentOptions.story) {
-      const storyTemplatePath = path.join(
-        frameworkTemplateDir,
-        `component.stories.${ext}.hbs`
-      );
-      const storyOutputPath = path.join(
-        componentDir,
-        `${componentName}.stories.${ext}`
-      );
+      const storyTemplatePath = path.join(frameworkTemplateDir, `component.stories.${ext}.hbs`);
+      const storyOutputPath = path.join(componentDir, `${componentName}.stories.${ext}`);
 
       if (await fileExists(storyTemplatePath)) {
         await renderTemplateToFile(storyTemplatePath, storyOutputPath, templateData);

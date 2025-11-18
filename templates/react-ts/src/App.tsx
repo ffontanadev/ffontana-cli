@@ -33,7 +33,7 @@ function App() {
             className="group flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 hover:opacity-90"
           >
             <Package className="w-5 h-5 transition-transform group-hover:rotate-12" />
-            View on NPM
+            View on npm
           </a>
 
           <a
@@ -51,7 +51,7 @@ function App() {
         <div className="animate-scale-in" style={{ animationDelay: "0.8s" }}>
           <div className="inline-block bg-muted/50 backdrop-blur-sm px-6 py-3 rounded-lg border border-primary/20">
             <code className="text-primary font-mono text-sm md:text-base">
-              npx ffontana-cli create my-app
+              npx ffontana-cli create app-name
             </code>
           </div>
         </div>

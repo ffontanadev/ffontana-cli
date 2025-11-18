@@ -1,0 +1,48 @@
+{{#if (eq style 'styled')}}
+import styled from 'styled-components';
+{{else if (eq style 'css-modules')}}
+import styles from './{{name}}.module.css';
+{{else if (eq style 'css')}}
+import './{{name}}.css';
+{{else if (eq style 'scss')}}
+import './{{name}}.scss';
+{{/if}}
+
+{{#if typescript}}
+interface {{name}}Props {
+  children?: React.ReactNode;
+}
+{{/if}}
+
+{{#if (eq style 'styled')}}
+const StyledContainer = styled.div`
+  padding: 1rem;
+`;
+
+{{/if}}
+{{#if typescript}}
+export function {{name}}({ children }: {{name}}Props) {
+{{else}}
+export function {{name}}({ children }) {
+{{/if}}
+  return (
+{{#if (eq style 'styled')}}
+    <StyledContainer>
+{{else if (eq style 'css-modules')}}
+    <div className={styles.container}>
+{{else if (eq style 'tailwind')}}
+    <div className="p-4">
+{{else}}
+    <div className="{{kebabCase name}}-container">
+{{/if}}
+      <h2>{{name}} Component</h2>
+      {children}
+{{#if (eq style 'styled')}}
+    </StyledContainer>
+{{else}}
+    </div>
+{{/if}}
+  );
+}
+
+export default {{name}};

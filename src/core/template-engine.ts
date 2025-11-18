@@ -38,6 +38,26 @@ function registerHelpers() {
       .replace(/\s+/g, '_')
       .toLowerCase();
   });
+
+  // Equality comparison helper
+  Handlebars.registerHelper('eq', (a: unknown, b: unknown) => {
+    return a === b;
+  });
+
+  // Not equal comparison helper (useful for future templates)
+  Handlebars.registerHelper('ne', (a: unknown, b: unknown) => {
+    return a !== b;
+  });
+
+  // Greater than helper (useful for future templates)
+  Handlebars.registerHelper('gt', (a: number, b: number) => {
+    return a > b;
+  });
+
+  // Less than helper (useful for future templates)
+  Handlebars.registerHelper('lt', (a: number, b: number) => {
+    return a < b;
+  });
 }
 
 // Register helpers on module load

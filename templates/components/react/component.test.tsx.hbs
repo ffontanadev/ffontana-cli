@@ -1,0 +1,16 @@
+import { render, screen } from '@testing-library/react';
+import { {{name}} } from './{{name}}';
+
+describe('{{name}}', () => {
+  it('renders without crashing', () => {
+    render(<{{name}} />);
+    const heading = screen.getByText(/{{name}} Component/i);
+    expect(heading).toBeInTheDocument();
+  });
+
+  it('renders children', () => {
+    render(<{{name}}>Test Content</{{name}}>);
+    const content = screen.getByText(/Test Content/i);
+    expect(content).toBeInTheDocument();
+  });
+});

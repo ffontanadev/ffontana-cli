@@ -19,5 +19,5 @@ export default defineConfig({
   // External packages that should not be bundled
   external: [],
   // Copy templates directory to dist
-  onSuccess: 'node -e "require(\'fs-extra\').copySync(\'templates\', \'dist/templates\')"',
+  onSuccess: 'node scripts/copy-templates.cjs',
 });

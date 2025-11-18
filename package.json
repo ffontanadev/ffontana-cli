@@ -1,8 +1,8 @@
 {
-  "name": "ff-cli",
+  "name": "ffontana-cli",
   "version": "0.1.0",
   "description": "A Swiss Army knife CLI for modern frontend development (React, Next.js, Lit)",
-  "author": "Your Name",
+  "author": "ffontana.dev",
   "license": "MIT",
   "type": "module",
   "bin": {

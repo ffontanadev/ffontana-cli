@@ -27,7 +27,7 @@ function getHookDir(framework: string, cwd: string): string {
  */
 function getTemplateDir(): string {
   const currentDir = getDirname(import.meta.url);
-  return path.join(currentDir, '..', '..', '..', 'templates');
+  return path.join(currentDir, '..', 'templates');
 }
 
 /**
@@ -38,8 +38,7 @@ async function promptHookName(): Promise<string> {
     type: 'text',
     name: 'name',
     message: 'Hook name (e.g., useCounter):',
-    validate: (value) =>
-      value.trim().length > 0 ? true : 'Hook name is required',
+    validate: (value) => (value.trim().length > 0 ? true : 'Hook name is required'),
   });
 
   return response.name;

@@ -10,7 +10,7 @@ export async function promptTemplate(): Promise<string> {
     name: 'template',
     message: 'Select a project template:',
     choices: [
-      { title: 'React (TypeScript)', value: 'react-ts' },
+      { title: 'React + Vite (TypeScript)', value: 'react-ts' },
       { title: 'Next.js (App Router)', value: 'nextjs-app' },
       { title: 'Lit (Web Components)', value: 'lit-component' },
     ],

@@ -66,7 +66,9 @@ export async function initProject(
 
     // Update package.json with project name
     const packageJsonPath = path.join(projectDir, 'package.json');
-    const packageJson = await import('fs-extra').then((fs) => fs.readJSON(packageJsonPath));
+    const packageJson = await import('fs-extra').then(
+      async (fs) => await fs.readJSON(packageJsonPath)
+    );
     packageJson.name = name;
     await writeJSON(packageJsonPath, packageJson);
 

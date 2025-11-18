@@ -46,10 +46,7 @@ registerHelpers();
 /**
  * Compile and render a template
  */
-export async function renderTemplate(
-  templatePath: string,
-  data: TemplateData
-): Promise<string> {
+export async function renderTemplate(templatePath: string, data: TemplateData): Promise<string> {
   const templateContent = await readFile(templatePath);
   const template = Handlebars.compile(templateContent);
   return template(data);

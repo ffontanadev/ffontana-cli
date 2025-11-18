@@ -40,8 +40,7 @@ export async function detectProject(cwd: string = process.cwd()): Promise<Projec
 
   // Detect TypeScript
   const typescript =
-    (await fileExists(path.join(projectRoot, 'tsconfig.json'))) ||
-    Boolean(allDeps['typescript']);
+    (await fileExists(path.join(projectRoot, 'tsconfig.json'))) || Boolean(allDeps['typescript']);
 
   // Detect package manager
   const { detectPackageManager } = await import('../utils/package-manager.js');

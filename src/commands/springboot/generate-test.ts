@@ -59,8 +59,8 @@ export async function generateSpringBootTest(
       const response = await prompts({
         type: 'text',
         name: 'package',
-        message: 'Java base package (e.g., com.bbva.users):',
-        initial: `com.bbva.${apiName?.replace(/-api$/, '')}`,
+        message: 'Java base package (e.g., uy.com.bbva.apis.apiname):',
+        initial: `uy.com.bbva.apis.${apiName?.replace(/-api$/, '')}`,
         validate: (value) => (value ? true : 'Package is required'),
       });
       basePackage = response.package;
@@ -95,8 +95,7 @@ export async function generateSpringBootTest(
     }
 
     // Build directory structure
-    const moduleName =
-      moduleType === 'rest' ? `rest-sb-${apiName}` : `services-${apiName}`;
+    const moduleName = moduleType === 'rest' ? `rest-sb-${apiName}` : `services-${apiName}`;
     const packagePath = basePackage!.replace(/\./g, '/');
 
     let outputDir = options.outDir;
@@ -140,7 +139,7 @@ export async function generateSpringBootTest(
 
     // Get template path
     const currentDir = getDirname(import.meta.url);
-    const templateDir = path.join(currentDir, '..', '..', '..', 'templates', 'springboot');
+    const templateDir = path.join(currentDir, '..', 'templates', 'springboot');
 
     let templateFile: string;
     switch (testType) {

@@ -1,4 +1,4 @@
-# ffontana-cli
+# ffontana-cli 🚧UNDER DEVELOPMENT🚧
 
 > A Swiss Army Knife CLI for modern frontend development
 
@@ -292,6 +292,7 @@ ff git setup-hooks --force
 ```
 
 **Installs and configures:**
+
 - Husky - Git hooks manager
 - Commitlint - Enforce conventional commits
 - lint-staged - Run linters on staged files
@@ -340,25 +341,27 @@ ff git pr
 - [x] Additional generators (hooks, pages, elements)
 - [x] Task runners (lint, format, test)
 - [x] Config management
+- [ ] Custom local/git user project templates
+- [ ] Custom user components/pages templates
+- [ ] Custom springboot classes templates
 
 ### Phase 3: Advanced Automation 🚧 (Current)
 
 - [x] Git workflow helpers
-- [ ] Dependency management
-- [ ] Code mod utilities
 - [ ] Monorepo support
+- [ ] n8n automation support
+- [ ] Template marketplace
 
 ### Phase 4: DX Polish 💎
 
 - [ ] Enhanced error handling
 - [ ] Performance optimizations
-- [ ] Comprehensive documentation
+- [ ] Expanded documentation
 - [ ] Testing suite expansion
 
 ### Phase 5: Plugin Ecosystem 🌐
 
 - [ ] Plugin development kit (PDK)
-- [ ] First-party plugins
 - [ ] Plugin marketplace
 - [ ] Community contributions
 

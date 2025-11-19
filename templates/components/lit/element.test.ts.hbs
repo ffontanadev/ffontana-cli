@@ -1,0 +1,21 @@
+import { fixture, expect, html } from '@open-wc/testing';
+import { {{name}} } from './{{name}}';
+
+describe('{{name}}', () => {
+  it('renders with default message', async () => {
+    const el = await fixture<{{name}}>(html`<{{kebabCase name}}></{{kebabCase name}}>`);
+    expect(el.message).to.equal('Hello from {{name}}');
+  });
+
+  it('renders custom message', async () => {
+    const el = await fixture<{{name}}>(
+      html`<{{kebabCase name}} message="Custom message"></{{kebabCase name}}>`
+    );
+    expect(el.message).to.equal('Custom message');
+  });
+
+  it('is accessible', async () => {
+    const el = await fixture<{{name}}>(html`<{{kebabCase name}}></{{kebabCase name}}>`);
+    await expect(el).to.be.accessible();
+  });
+});

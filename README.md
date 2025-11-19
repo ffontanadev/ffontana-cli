@@ -263,70 +263,9 @@ npm run link:local
 ff --version
 ```
 
-### `ff git`
-
-Git workflow helpers for conventional commits and automation.
-
-#### `ff git commit`
-
-Create conventional commits interactively with validation.
-
-```bash
-# Interactive conventional commit
-ff git commit
-
-# Dry run (preview without committing)
-ff git commit --dry-run
-```
-
-#### `ff git setup-hooks`
-
-Setup git hooks with husky and commitlint.
-
-```bash
-# Interactive setup
-ff git setup-hooks
-
-# Force reconfiguration
-ff git setup-hooks --force
-```
-
-**Installs and configures:**
-- Husky - Git hooks manager
-- Commitlint - Enforce conventional commits
-- lint-staged - Run linters on staged files
-- Pre-commit and commit-msg hooks
-
-#### `ff git branch [name]`
-
-Create branches with naming conventions.
-
-```bash
-# Interactive branch creation
-ff git branch
-
-# Create feature branch
-ff git branch user-authentication
-
-# Create with issue number
-ff git branch user-auth --issue 123
-
-# Create without checkout
-ff git branch new-feature --no-checkout
-```
-
-#### `ff git pr`
-
-Generate pull request templates.
-
-```bash
-# Interactive PR template generation
-ff git pr
-```
-
 ## 🗺️ Roadmap
 
-### Phase 1: MVP ✅
+### Phase 1: MVP ✅ (Current)
 
 - [x] Project scaffolding (React TypeScript)
 - [x] Component generation
@@ -334,16 +273,16 @@ ff git pr
 - [x] Config system
 - [x] Package manager detection
 
-### Phase 2: Core Modules ✅
+### Phase 2: Core Modules 🚧 (Upcoming)
 
-- [x] Next.js and Lit templates
-- [x] Additional generators (hooks, pages, elements)
-- [x] Task runners (lint, format, test)
-- [x] Config management
+- [ ] Next.js and Lit templates
+- [ ] Additional generators (hooks, pages, layouts)
+- [ ] Setup wizards (lint, test, Storybook)
+- [ ] Plugin system foundation
 
-### Phase 3: Advanced Automation 🚧 (Current)
+### Phase 3: Advanced Automation 📅
 
-- [x] Git workflow helpers
+- [ ] Git workflow helpers
 - [ ] Dependency management
 - [ ] Code mod utilities
 - [ ] Monorepo support

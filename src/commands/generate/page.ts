@@ -22,7 +22,7 @@ function getPageDir(cwd: string, pageName: string, dynamic: boolean): string {
  */
 function getTemplateDir(): string {
   const currentDir = getDirname(import.meta.url);
-  return path.join(currentDir, '..', '..', '..', 'templates');
+  return path.join(currentDir, '..', 'templates');
 }
 
 /**
@@ -33,8 +33,7 @@ async function promptPageName(): Promise<string> {
     type: 'text',
     name: 'name',
     message: 'Page name:',
-    validate: (value) =>
-      value.trim().length > 0 ? true : 'Page name is required',
+    validate: (value) => (value.trim().length > 0 ? true : 'Page name is required'),
   });
 
   return response.name;
@@ -179,7 +178,9 @@ export async function generatePage(
       }
     }
 
-    logger.success(`\n✨ Page "${pageName}" generated successfully in app/${pageOptions.dynamic ? `[${pageName}]` : pageName}!`);
+    logger.success(
+      `\n✨ Page "${pageName}" generated successfully in app/${pageOptions.dynamic ? `[${pageName}]` : pageName}!`
+    );
   } catch (error) {
     logger.error(`Failed to generate page: ${(error as Error).message}`);
     if (options.debug) {

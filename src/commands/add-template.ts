@@ -38,11 +38,7 @@ function validateTemplateName(name: string): { valid: boolean; error?: string } 
  * Check if source is a GitHub URL
  */
 function isGitHubUrl(source: string): boolean {
-  const githubPatterns = [
-    /^https?:\/\/github\.com\//,
-    /^git@github\.com:/,
-    /^github:/,
-  ];
+  const githubPatterns = [/^https?:\/\/github\.com\//, /^git@github\.com:/, /^github:/];
 
   return githubPatterns.some((pattern) => pattern.test(source));
 }
@@ -56,7 +52,7 @@ function extractTemplateNameFromUrl(url: string): string {
 
   // Extract repo name from URL
   const match = cleanUrl.match(/\/([^\/]+)$/);
-  return match ? match[1] : 'template';
+  return match?.[1] ?? 'template';
 }
 
 /**
@@ -65,8 +61,7 @@ function extractTemplateNameFromUrl(url: string): string {
 async function cloneGitHubRepo(
   url: string,
   templateName: string,
-  targetDir: string,
-  options: AddTemplateOptions
+  targetDir: string
 ): Promise<void> {
   try {
     logger.info(`Cloning repository: ${url}`);
@@ -93,12 +88,10 @@ async function copyLocalTemplate(
   sourcePath: string,
   templateName: string,
   targetDir: string,
-  options: AddTemplateOptions
+  cwd: string
 ): Promise<void> {
   try {
-    const absoluteSource = path.isAbsolute(sourcePath)
-      ? sourcePath
-      : path.join(options.cwd ?? process.cwd(), sourcePath);
+    const absoluteSource = path.isAbsolute(sourcePath) ? sourcePath : path.join(cwd, sourcePath);
 
     // Check if source exists
     if (!(await fileExists(absoluteSource))) {
@@ -181,9 +174,9 @@ export async function addTemplate(
 
     // Add template based on source type
     if (isGitHubUrl(source)) {
-      await cloneGitHubRepo(source, templateName, userTemplatesDir, options);
+      await cloneGitHubRepo(source, templateName, userTemplatesDir);
     } else {
-      await copyLocalTemplate(source, templateName, userTemplatesDir, options);
+      await copyLocalTemplate(source, templateName, userTemplatesDir, cwd);
     }
 
     // Display location
@@ -203,10 +196,7 @@ export async function addTemplate(
  * Register the add command with template subcommand
  */
 export function registerAddCommand(program: Command): void {
-  const add = program
-    .command('add')
-    .alias('a')
-    .description('Add resources (templates, etc.)');
+  const add = program.command('add').alias('a').description('Add resources (templates, etc.)');
 
   add
     .command('template')

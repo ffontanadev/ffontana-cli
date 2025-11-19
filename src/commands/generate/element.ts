@@ -31,8 +31,7 @@ async function promptElementName(): Promise<string> {
     type: 'text',
     name: 'name',
     message: 'Element name (e.g., MyButton):',
-    validate: (value) =>
-      value.trim().length > 0 ? true : 'Element name is required',
+    validate: (value) => (value.trim().length > 0 ? true : 'Element name is required'),
   });
 
   return response.name;

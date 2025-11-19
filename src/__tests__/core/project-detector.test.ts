@@ -114,9 +114,7 @@ describe('project-detector', () => {
     });
 
     it('should throw error when no package.json found', async () => {
-      await expect(detectProject(tempDir)).rejects.toThrow(
-        'No package.json found'
-      );
+      await expect(detectProject(tempDir)).rejects.toThrow('No package.json found');
     });
   });
 

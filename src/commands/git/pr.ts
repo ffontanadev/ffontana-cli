@@ -198,7 +198,9 @@ Closes #
     // Write template
     await writeFile(templatePath, template);
 
-    logger.success(`✨ PR template created: ${picocolors.green('.github/PULL_REQUEST_TEMPLATE.md')}`);
+    logger.success(
+      `✨ PR template created: ${picocolors.green('.github/PULL_REQUEST_TEMPLATE.md')}`
+    );
     console.log(picocolors.cyan('\nNext steps:'));
     console.log('  1. Commit and push the template to your repository');
     console.log('  2. GitHub will use this template for all new PRs');

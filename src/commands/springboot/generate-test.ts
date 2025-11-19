@@ -95,8 +95,7 @@ export async function generateSpringBootTest(
     }
 
     // Build directory structure
-    const moduleName =
-      moduleType === 'rest' ? `rest-sb-${apiName}` : `services-${apiName}`;
+    const moduleName = moduleType === 'rest' ? `rest-sb-${apiName}` : `services-${apiName}`;
     const packagePath = basePackage!.replace(/\./g, '/');
 
     let outputDir = options.outDir;

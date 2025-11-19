@@ -2,7 +2,7 @@ import prompts from 'prompts';
 import path from 'path';
 import os from 'os';
 import fs from 'fs-extra';
-import type { Framework, StyleFormat } from '../types/index.js';
+import type { StyleFormat } from '../types/index.js';
 import { dirExists } from './file-system.js';
 import { loadConfig } from '../core/config-loader.js';
 

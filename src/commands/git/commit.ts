@@ -16,7 +16,10 @@ import { logger } from '../../utils/index.js';
 /**
  * Interactive conventional commit
  */
-export async function interactiveCommit(options: { dryRun?: boolean; debug?: boolean }): Promise<void> {
+export async function interactiveCommit(options: {
+  dryRun?: boolean;
+  debug?: boolean;
+}): Promise<void> {
   try {
     const cwd = process.cwd();
 

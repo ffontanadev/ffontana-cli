@@ -8,6 +8,9 @@ import { registerConfigCommand } from './commands/config.js';
 import { registerLintCommand } from './commands/tasks/lint.js';
 import { registerFormatCommand } from './commands/tasks/format.js';
 import { registerTestCommand } from './commands/tasks/test.js';
+import { registerGitCommand } from './commands/git/index.js';
+import { registerJenkinsCommand } from './commands/jenkins/index.js';
+import { registerSpringBootCommand } from './commands/springboot/index.js';
 
 // Get package.json for version
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -32,6 +35,9 @@ program
 registerInitCommand(program);
 registerGenerateCommand(program);
 registerConfigCommand(program);
+registerGitCommand(program);
+registerJenkinsCommand(program);
+registerSpringBootCommand(program);
 
 // Register task commands
 registerLintCommand(program);

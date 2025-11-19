@@ -115,9 +115,7 @@ export class JenkinsWebhookServer {
         const payload: JenkinsWebhookPayload = req.body;
 
         logger.info(
-          picocolors.cyan(
-            `\n📦 Received Jenkins event: ${payload.name} #${payload.build.number}`
-          )
+          picocolors.cyan(`\n📦 Received Jenkins event: ${payload.name} #${payload.build.number}`)
         );
         logger.info(`Phase: ${payload.build.phase}, Status: ${payload.build.status}`);
 
@@ -153,7 +151,9 @@ export class JenkinsWebhookServer {
     // Call status-specific handlers
     switch (result.build.status) {
       case 'SUCCESS':
-        logger.success(picocolors.green(`✓ Build ${result.name} #${result.build.number} succeeded`));
+        logger.success(
+          picocolors.green(`✓ Build ${result.name} #${result.build.number} succeeded`)
+        );
         if (this.handlers.onSuccess) {
           await this.handlers.onSuccess(result);
         }

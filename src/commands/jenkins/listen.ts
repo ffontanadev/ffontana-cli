@@ -121,7 +121,9 @@ export async function startJenkinsListener(options: {
 
     // Register event handlers
     server.on('success', async (result) => {
-      logger.success(picocolors.green(`\n✨ Build succeeded: ${result.name} #${result.build.number}`));
+      logger.success(
+        picocolors.green(`\n✨ Build succeeded: ${result.name} #${result.build.number}`)
+      );
       logger.info(`URL: ${result.build.fullUrl}`);
       if (result.build.duration) {
         logger.info(`Duration: ${Math.round(result.build.duration / 1000)}s`);
@@ -134,7 +136,9 @@ export async function startJenkinsListener(options: {
     });
 
     server.on('unstable', async (result) => {
-      logger.warn(picocolors.yellow(`\n⚠️  Build unstable: ${result.name} #${result.build.number}`));
+      logger.warn(
+        picocolors.yellow(`\n⚠️  Build unstable: ${result.name} #${result.build.number}`)
+      );
       logger.info(`URL: ${result.build.fullUrl}`);
     });
 

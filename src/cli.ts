@@ -5,6 +5,7 @@ import { dirname, join } from 'path';
 import { registerInitCommand } from './commands/init.js';
 import { registerGenerateCommand } from './commands/generate/index.js';
 import { registerConfigCommand } from './commands/config.js';
+import { registerAddCommand } from './commands/add-template.js';
 import { registerLintCommand } from './commands/tasks/lint.js';
 import { registerFormatCommand } from './commands/tasks/format.js';
 import { registerTestCommand } from './commands/tasks/test.js';
@@ -35,6 +36,7 @@ program
 registerInitCommand(program);
 registerGenerateCommand(program);
 registerConfigCommand(program);
+registerAddCommand(program);
 registerGitCommand(program);
 registerJenkinsCommand(program);
 registerSpringBootCommand(program);

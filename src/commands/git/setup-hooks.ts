@@ -2,11 +2,7 @@ import type { Command } from 'commander';
 import prompts from 'prompts';
 import picocolors from 'picocolors';
 import type { GitHookSetupOptions } from '../../types/index.js';
-import {
-  isGitRepository,
-  isHuskyInstalled,
-  isCommitlintConfigured,
-} from '../../utils/index.js';
+import { isGitRepository, isHuskyInstalled, isCommitlintConfigured } from '../../utils/index.js';
 import { logger } from '../../utils/index.js';
 import { detectPackageManager, addPackages } from '../../utils/index.js';
 import { writeJSON, writeFile, ensureDir, fileExists } from '../../utils/index.js';
@@ -16,7 +12,9 @@ import path from 'path';
 /**
  * Setup git hooks with husky and commitlint
  */
-export async function setupGitHooks(options: GitHookSetupOptions & { debug?: boolean }): Promise<void> {
+export async function setupGitHooks(
+  options: GitHookSetupOptions & { debug?: boolean }
+): Promise<void> {
   try {
     const cwd = process.cwd();
 
@@ -137,7 +135,19 @@ export async function setupGitHooks(options: GitHookSetupOptions & { debug?: boo
           'type-enum': [
             2,
             'always',
-            ['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'build', 'ci', 'chore', 'revert'],
+            [
+              'feat',
+              'fix',
+              'docs',
+              'style',
+              'refactor',
+              'perf',
+              'test',
+              'build',
+              'ci',
+              'chore',
+              'revert',
+            ],
           ],
           'subject-case': [2, 'always', 'lower-case'],
           'subject-empty': [2, 'never'],

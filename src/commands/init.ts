@@ -1,4 +1,5 @@
 import path from 'path';
+import os from 'os';
 import type { Command } from 'commander';
 import type { InitCommandOptions } from '../types/index.js';
 import { logger } from '../utils/index.js';
@@ -10,6 +11,7 @@ import {
 } from '../utils/index.js';
 import { copy, ensureDir, isEmptyDir, readJSON, writeJSON, getDirname } from '../utils/index.js';
 import { installDependencies } from '../utils/index.js';
+import { loadConfig } from '../core/config-loader.js';
 import { execa } from 'execa';
 
 /**
@@ -18,6 +20,15 @@ import { execa } from 'execa';
 function getTemplateDir(): string {
   const currentDir = getDirname(import.meta.url);
   return path.join(currentDir, 'templates');
+}
+
+/**
+ * Get user templates directory
+ */
+async function getUserTemplatesDir(cwd: string): Promise<string> {
+  const config = await loadConfig(cwd);
+  const defaultDir = path.join(os.homedir(), '.config', 'ff-cli', 'user-templates');
+  return config.userTemplatesDir ?? defaultDir;
 }
 
 /**
@@ -57,10 +68,21 @@ export async function initProject(
     logger.success(`Created project directory: ${projectDir}`);
 
     // Copy template
-    const templatesDir = getTemplateDir();
-    const templateDir = path.join(templatesDir, template);
+    let templateDir: string;
 
-    logger.info(`Copying template: ${template}`);
+    // Check if template is a user template (prefixed with "user:")
+    if (template.startsWith('user:')) {
+      const templateName = template.substring(5); // Remove "user:" prefix
+      const userTemplatesDir = await getUserTemplatesDir(cwd);
+      templateDir = path.join(userTemplatesDir, templateName);
+      logger.info(`Copying user template: ${templateName}`);
+    } else {
+      // Built-in template
+      const templatesDir = getTemplateDir();
+      templateDir = path.join(templatesDir, template);
+      logger.info(`Copying template: ${template}`);
+    }
+
     await copy(templateDir, projectDir);
     logger.success('Template copied');
 

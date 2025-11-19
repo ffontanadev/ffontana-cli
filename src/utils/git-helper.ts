@@ -20,7 +20,7 @@ export const COMMIT_TYPES: CommitTypeInfo[] = [
   { type: 'test', description: 'Adding or updating tests', emoji: '✅' },
   { type: 'build', description: 'Build system or external dependencies', emoji: '🔧' },
   { type: 'ci', description: 'CI configuration changes', emoji: '👷' },
-  { type: 'chore', description: 'Other changes that don\'t modify src or test files', emoji: '🔨' },
+  { type: 'chore', description: "Other changes that don't modify src or test files", emoji: '🔨' },
   { type: 'revert', description: 'Revert a previous commit', emoji: '⏪' },
 ];
 
@@ -135,10 +135,7 @@ export function formatCommitMessage(options: {
 /**
  * Create a git commit
  */
-export async function createCommit(
-  message: string,
-  cwd: string = process.cwd()
-): Promise<void> {
+export async function createCommit(message: string, cwd: string = process.cwd()): Promise<void> {
   try {
     await execa('git', ['commit', '-m', message], { cwd });
   } catch (error) {
@@ -244,13 +241,13 @@ export function validateCommitMessage(message: string): {
   error?: string;
 } {
   // Basic conventional commit pattern: type(scope?): subject
-  const pattern = /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?:\s.+/;
+  const pattern =
+    /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?:\s.+/;
 
   if (!pattern.test(message)) {
     return {
       valid: false,
-      error:
-        'Commit message must follow conventional commits format: type(scope): subject',
+      error: 'Commit message must follow conventional commits format: type(scope): subject',
     };
   }
 

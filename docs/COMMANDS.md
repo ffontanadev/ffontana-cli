@@ -12,8 +12,16 @@
   - [Hook Generation](#hook-generation)
   - [Page Generation](#page-generation)
   - [Element Generation](#element-generation)
+  - [Add Custom Templates](#add-custom-templates)
 - [Configuration Management](#configuration-management)
 - [Task Runners](#task-runners)
+- [Git Workflow](#git-workflow)
+  - [ff git commit](#ff-git-commit)
+  - [ff git branch](#ff-git-branch)
+  - [ff git setup-hooks](#ff-git-setup-hooks)
+  - [ff git pr](#ff-git-pr)
+- [Jenkins Integration](#jenkins-integration)
+- [Spring Boot Utilities](#spring-boot-utilities)
 - [Interactive vs Non-Interactive Modes](#interactive-vs-non-interactive-modes)
 - [Common Workflows](#common-workflows)
 - [Troubleshooting](#troubleshooting)
@@ -601,6 +609,101 @@ src/components/
 
 ---
 
+### Add Custom Templates
+
+#### `ff add template [source]` (alias: `ff a t`)
+
+Add custom project or generator templates from GitHub repositories or local directories.
+
+#### Syntax
+
+```bash
+ff add template [source] [options]
+ff a t [source] [options]
+```
+
+#### Arguments
+
+- `source` (required): GitHub URL or local directory path
+
+#### Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `-n, --name` | string | Custom template name |
+| `-f, --force` | boolean | Force overwrite if template exists |
+| `--debug` | boolean | Enable debug mode |
+
+#### Examples
+
+**Add from GitHub:**
+```bash
+# Add template from GitHub repository
+ff add template https://github.com/company/react-template
+
+# Add with custom name
+ff add template https://github.com/user/template --name company-standard
+```
+
+**Add from local directory:**
+```bash
+# Add from local directory
+ff add template ./my-custom-template
+
+# Add with custom name and force overwrite
+ff add template ../shared-templates/react-custom --name my-template --force
+```
+
+#### Using Custom Templates
+
+After adding a template, use it with the `user:` prefix:
+
+```bash
+# List available custom templates
+ls ~/.config/ff-cli/user-templates/
+
+# Use custom template
+ff init my-project --template user:company-standard
+```
+
+#### Template Storage
+
+Custom templates are stored at:
+- **macOS/Linux:** `~/.config/ff-cli/user-templates/`
+- **Windows:** `%USERPROFILE%\.config\ff-cli\user-templates\`
+
+#### Template Naming Rules
+
+- Alphanumeric characters only
+- Hyphens (`-`) and underscores (`_`) allowed
+- No spaces or special characters
+
+#### What Happens
+
+When you add a template:
+1. Source is validated (GitHub URL or local path)
+2. Template is cloned/copied to user templates directory
+3. `.git` directory is removed (if present)
+4. Template name is registered
+
+#### Troubleshooting
+
+**Template already exists:**
+```bash
+ff add template ./my-template --force
+```
+
+**Invalid template name:**
+```bash
+# Error: Invalid template name
+ff add template ./my-template --name "My Template"
+
+# Fix: Use hyphens instead of spaces
+ff add template ./my-template --name my-template
+```
+
+---
+
 ## Configuration Management
 
 ### `ff config`
@@ -712,6 +815,791 @@ ff test --coverage
 **Behavior**:
 - Uses `tasks.test` from config if defined
 - Falls back to project's test script from package.json
+
+---
+
+## Git Workflow
+
+Streamline your git workflows with conventional commits, branch naming conventions, and automated hooks.
+
+### `ff git commit`
+
+Create conventional commits interactively with validation.
+
+#### Syntax
+
+```bash
+ff git commit [options]
+```
+
+#### Options
+
+| Option | Description |
+|--------|-------------|
+| `--dry-run` | Preview commit without creating |
+| `--debug` | Enable debug mode |
+
+#### Interactive Process
+
+When you run `ff git commit`, you'll be guided through:
+
+**1. Commit Type**
+```
+? Select commit type:
+  feat     - A new feature
+  fix      - A bug fix
+  docs     - Documentation only changes
+  style    - Code style changes (formatting, semicolons)
+  refactor - Code change that neither fixes a bug nor adds a feature
+  perf     - Performance improvement
+  test     - Adding missing tests
+  build    - Changes to build system or dependencies
+  ci       - CI configuration changes
+  chore    - Other changes that don't modify src or test files
+  revert   - Revert a previous commit
+```
+
+**2. Scope (Optional)**
+```
+? Commit scope (optional): api
+```
+Examples: `api`, `ui`, `auth`, `core`, `components`
+
+**3. Subject**
+```
+? Short description (imperative mood): add user authentication endpoint
+```
+- Use imperative mood ("add" not "added")
+- No period at the end
+- Maximum 50 characters
+
+**4. Body (Optional)**
+```
+? Detailed description (optional):
+Implement JWT-based authentication with refresh tokens.
+Includes rate limiting and security headers.
+```
+
+**5. Breaking Changes**
+```
+? Are there breaking changes? (y/N)
+? Breaking change description: Authentication now requires API key in headers
+```
+
+**6. Issue References**
+```
+? Issue references (e.g., #123, #456): #123, #456
+```
+
+#### Generated Commit Message
+
+```
+feat(api): add user authentication endpoint
+
+Implement JWT-based authentication with refresh tokens.
+Includes rate limiting and security headers.
+
+BREAKING CHANGE: Authentication now requires API key in headers
+
+Closes #123, #456
+```
+
+#### Examples
+
+**Basic commit:**
+```bash
+ff git commit
+# Follow prompts to create commit
+```
+
+**Preview without committing:**
+```bash
+ff git commit --dry-run
+# Shows preview of commit message
+```
+
+#### Commit Message Format
+
+Follows the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+BREAKING CHANGE: <description>
+
+<footer>
+```
+
+---
+
+### `ff git branch [name]`
+
+Create git branches with naming conventions.
+
+#### Syntax
+
+```bash
+ff git branch [name] [options]
+```
+
+#### Arguments
+
+- `name` (optional): Branch name (will be prefixed with type)
+
+#### Options
+
+| Option | Description |
+|--------|-------------|
+| `--no-checkout` | Create branch without checking it out |
+| `-i, --issue` | Link to issue number |
+| `--debug` | Enable debug mode |
+
+#### Branch Types
+
+```
+feat      - New feature
+fix       - Bug fix
+chore     - Maintenance tasks
+refactor  - Code refactoring
+docs      - Documentation updates
+```
+
+#### Examples
+
+**Interactive mode:**
+```bash
+ff git branch
+# Prompts for branch type and name
+```
+
+**Create feature branch:**
+```bash
+ff git branch user-authentication
+# Creates: feat/user-authentication
+```
+
+**Link to issue:**
+```bash
+ff git branch add-search --issue 123
+# Creates: feat/123-add-search
+```
+
+**Create without checkout:**
+```bash
+ff git branch new-feature --no-checkout
+# Creates branch but stays on current branch
+```
+
+**Create fix branch:**
+```bash
+# If prompted for type, select "fix"
+ff git branch login-error --issue 456
+# Creates: fix/456-login-error
+```
+
+#### Branch Naming Format
+
+```
+<type>/<name>                    # Simple format
+<type>/<issue-number>-<name>     # With issue reference
+```
+
+**Examples:**
+- `feat/user-dashboard`
+- `feat/123-add-payment`
+- `fix/login-redirect`
+- `fix/456-session-timeout`
+- `docs/update-readme`
+- `refactor/api-layer`
+
+---
+
+### `ff git setup-hooks`
+
+Install and configure git hooks with Husky, Commitlint, and lint-staged.
+
+#### Syntax
+
+```bash
+ff git setup-hooks [options]
+```
+
+#### Options
+
+| Option | Description |
+|--------|-------------|
+| `-f, --force` | Force reconfiguration |
+| `--debug` | Enable debug mode |
+
+#### What Gets Installed
+
+**1. Husky** - Git hooks manager
+```json
+"husky": "^8.0.3"
+```
+
+**2. Commitlint** - Enforce conventional commits
+```json
+"@commitlint/cli": "^17.0.0",
+"@commitlint/config-conventional": "^17.0.0"
+```
+
+**3. lint-staged** - Run linters on staged files
+```json
+"lint-staged": "^13.0.0"
+```
+
+#### Configured Hooks
+
+**commit-msg hook** (`.husky/commit-msg`):
+```bash
+#!/usr/bin/env sh
+npx --no -- commitlint --edit ${1}
+```
+Validates commit messages against conventional commit format.
+
+**pre-commit hook** (`.husky/pre-commit`):
+```bash
+#!/usr/bin/env sh
+npx lint-staged
+```
+Runs linters and formatters on staged files before commit.
+
+#### Configuration Files Created
+
+**`.commitlintrc.json`:**
+```json
+{
+  "extends": ["@commitlint/config-conventional"]
+}
+```
+
+**`package.json` additions:**
+```json
+{
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}
+```
+
+#### Interactive Setup
+
+```bash
+ff git setup-hooks
+```
+
+**Prompts:**
+```
+? Install Husky? (Y/n)
+? Install Commitlint? (Y/n)
+? Install lint-staged? (Y/n)
+? Configure pre-commit hook? (Y/n)
+```
+
+#### Examples
+
+**Full setup:**
+```bash
+ff git setup-hooks
+# Answer Y to all prompts
+```
+
+**Force reconfigure:**
+```bash
+ff git setup-hooks --force
+# Overwrites existing configuration
+```
+
+#### What Happens After Setup
+
+**Before commit:**
+```bash
+git commit -m "update readme"
+# ❌ Rejected: Must follow conventional commit format
+```
+
+**Correct commit:**
+```bash
+git commit -m "docs: update readme"
+# ✅ Accepted: Valid conventional commit
+```
+
+**With staged files:**
+```bash
+git add src/components/Button.tsx
+git commit -m "feat: add button component"
+# ✅ Runs ESLint and Prettier on Button.tsx
+# ✅ Auto-formats and fixes issues
+# ✅ Creates commit
+```
+
+---
+
+### `ff git pr`
+
+Generate pull request templates for GitHub.
+
+#### Syntax
+
+```bash
+ff git pr [options]
+```
+
+#### Options
+
+| Option | Description |
+|--------|-------------|
+| `--debug` | Enable debug mode |
+
+#### Template Types
+
+**1. Feature Template**
+For new features and enhancements:
+```markdown
+## Summary
+Description of the feature
+
+## Changes
+- Bullet points of changes
+
+## Test Plan
+- [ ] Manual testing steps
+- [ ] Unit tests added/updated
+
+## Screenshots
+(if applicable)
+```
+
+**2. Bug Fix Template**
+For bug fixes:
+```markdown
+## Bug Description
+What was the bug?
+
+## Root Cause
+What caused the bug?
+
+## Solution
+How was it fixed?
+
+## Test Plan
+- [ ] Steps to reproduce original bug
+- [ ] Verification steps
+```
+
+**3. Hotfix Template**
+For urgent production fixes:
+```markdown
+## Incident
+Description of production issue
+
+## Impact
+User/business impact
+
+## Fix
+What was changed
+
+## Verification
+How it was tested
+```
+
+**4. Docs Template**
+For documentation updates:
+```markdown
+## Documentation Changes
+What was updated/added
+
+## Reason
+Why these changes were needed
+
+## Checklist
+- [ ] Links tested
+- [ ] Examples verified
+```
+
+#### Example
+
+```bash
+ff git pr
+```
+
+**Prompts:**
+```
+? Select template type:
+❯ Feature - New features/enhancements
+  Bug Fix - Bug fixes with reproduction steps
+  Hotfix - Urgent production fixes
+  Docs - Documentation updates
+```
+
+#### Generated File
+
+Creates `.github/PULL_REQUEST_TEMPLATE.md` in your repository.
+
+#### Using the Template
+
+**When creating a PR on GitHub:**
+1. Push your branch: `git push origin feat/my-feature`
+2. Go to GitHub and create Pull Request
+3. Template automatically populates the PR description
+4. Fill in the sections and submit
+
+#### Overwriting Existing Template
+
+```bash
+ff git pr
+```
+
+**If template exists:**
+```
+! PR template already exists at .github/PULL_REQUEST_TEMPLATE.md
+? Overwrite existing template? (Y/n)
+```
+
+---
+
+## Jenkins Integration
+
+### `ff jenkins listen`
+
+Start a webhook server to listen for Jenkins build events.
+
+#### Syntax
+
+```bash
+ff jenkins listen [options]
+```
+
+#### Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-p, --port` | Webhook server port | `3000` |
+| `-s, --secret` | Secret token for authentication | (none) |
+| `--auto-test` | Auto-trigger tests on successful builds | `false` |
+| `--test-command` | Command to run for tests | `npm test` |
+| `-c, --config` | Interactive configuration | `false` |
+| `--debug` | Enable debug mode | `false` |
+
+#### Quick Start
+
+**1. Interactive configuration:**
+```bash
+ff jenkins listen --config
+```
+
+**Prompts:**
+```
+? Webhook server port: 3000
+? Secret token (optional):
+? Auto-trigger tests on success? (Y/n)
+? Test command: npm test
+```
+
+**2. Start listening:**
+```bash
+ff jenkins listen
+```
+
+**Output:**
+```
+🎧 Jenkins webhook listener started
+📡 Listening on http://localhost:3000
+🔐 Secret token: (not configured)
+🧪 Auto-test: enabled (npm test)
+
+Waiting for Jenkins events...
+```
+
+#### Command Line Configuration
+
+```bash
+ff jenkins listen \
+  --port 3000 \
+  --secret my-secret-token \
+  --auto-test \
+  --test-command "npm run test:ci"
+```
+
+#### Webhook Events
+
+The server listens for these Jenkins build events:
+
+**Success:**
+```
+✅ Build SUCCESS: my-job #42
+   Duration: 2m 15s
+   🧪 Running tests: npm test
+```
+
+**Failure:**
+```
+❌ Build FAILED: my-job #43
+   Duration: 1m 30s
+   Error: Compilation failed
+```
+
+**Unstable:**
+```
+⚠️  Build UNSTABLE: my-job #44
+   Duration: 3m 10s
+   Warnings: 5 test failures
+```
+
+#### Jenkins Configuration
+
+Configure Jenkins to send webhooks to your listener:
+
+**1. Install Jenkins Plugin:**
+- Install "Generic Webhook Trigger" plugin
+
+**2. Configure Job:**
+```
+Build Triggers:
+  ☑ Generic Webhook Trigger
+
+Post Content Parameters:
+  Variable: event
+  JSONPath: $.status
+
+Token: (optional, use --secret value)
+
+URL: http://your-machine:3000/webhook
+```
+
+**3. Test webhook:**
+```bash
+curl -X POST http://localhost:3000/webhook \
+  -H "Content-Type: application/json" \
+  -d '{"status": "success", "job": "test-job", "number": 1}'
+```
+
+#### Configuration Storage
+
+Configuration is saved to:
+- **macOS/Linux:** `~/.config/ff-cli/jenkins.json`
+- **Windows:** `%USERPROFILE%\.config\ff-cli\jenkins.json`
+
+**Example:**
+```json
+{
+  "port": 3000,
+  "secret": "my-secret-token",
+  "autoTest": true,
+  "testCommand": "npm test"
+}
+```
+
+#### Auto-Test Feature
+
+When enabled, automatically runs tests after successful builds:
+
+```bash
+ff jenkins listen --auto-test --test-command "npm run test:ci"
+```
+
+**Behavior:**
+```
+✅ Build SUCCESS: my-job #42
+   Duration: 2m 15s
+   🧪 Running tests: npm run test:ci
+
+   > test:ci
+   > vitest run --coverage
+
+   ✅ Tests passed (42 tests)
+   📊 Coverage: 87%
+```
+
+#### Stopping the Server
+
+Press `Ctrl+C` or `Cmd+C`:
+```
+^C
+🛑 Jenkins webhook listener stopped
+```
+
+---
+
+## Spring Boot Utilities
+
+### `ff springboot generate-test [className]` (alias: `ff sb gt`)
+
+Generate JUnit 5 test files for Spring Boot projects.
+
+#### Syntax
+
+```bash
+ff springboot generate-test [className] [options]
+ff sb gt [className] [options]
+```
+
+#### Arguments
+
+- `className` (optional): Class name to test (e.g., `UserController`)
+
+#### Options
+
+| Option | Description | Required |
+|--------|-------------|----------|
+| `-a, --api-name` | API name (e.g., `users-api`) | Yes |
+| `-p, --package` | Java base package (e.g., `com.company.users`) | Yes |
+| `-t, --type` | Test type: `controller`, `service`, `dao` | Yes |
+| `-m, --module` | Module type: `rest`, `service`, `dao` | Yes |
+| `-o, --out-dir` | Output directory | No |
+| `--debug` | Enable debug mode | No |
+
+#### Test Types
+
+**Controller Tests** (`--type controller`):
+- Uses MockMVC for endpoint testing
+- Tests REST API endpoints
+- Validates request/response
+
+**Service Tests** (`--type service`):
+- Uses Mockito for mocking dependencies
+- Tests business logic
+- Unit tests for service layer
+
+**DAO/Repository Tests** (`--type dao`):
+- Uses Mockito for data access testing
+- Tests database operations
+- Validates queries
+
+#### Module Types
+
+Maps to Spring Boot project structure:
+
+| Module Type | Directory Structure |
+|-------------|---------------------|
+| `rest` | `rest-sb-{apiName}/` |
+| `service` | `services-{apiName}/` |
+| `dao` | `services-{apiName}/` |
+
+#### Examples
+
+**Controller test:**
+```bash
+ff springboot generate-test UserController \
+  --api-name users-api \
+  --package com.company.users \
+  --type controller \
+  --module rest
+```
+
+**Service test:**
+```bash
+ff sb gt UserService \
+  --api-name users-api \
+  --package com.company.users \
+  --type service \
+  --module service
+```
+
+**DAO test:**
+```bash
+ff sb gt UserRepository \
+  --api-name users-api \
+  --package com.company.users \
+  --type dao \
+  --module dao
+```
+
+#### Generated Structure
+
+**Controller test:**
+```
+users-api/
+  rest-sb-users-api/
+    src/test/java/com/company/users/
+      UserControllerTest.java
+```
+
+**Service test:**
+```
+users-api/
+  services-users-api/
+    src/test/java/com/company/users/
+      UserServiceTest.java
+```
+
+#### Generated Test Example
+
+**UserControllerTest.java:**
+```java
+package com.company.users;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(UserController.class)
+class UserControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void testGetUsers() throws Exception {
+        mockMvc.perform(get("/api/users"))
+            .andExpect(status().isOk());
+    }
+}
+```
+
+#### Package Path Conversion
+
+Package name is converted to directory path:
+- `com.company.users` → `com/company/users`
+- `com.bbva.apx.users` → `com/bbva/apx/users`
+
+#### Interactive Mode
+
+```bash
+ff springboot generate-test
+```
+
+**Prompts:**
+```
+? Class name to test: UserController
+? API name: users-api
+? Base package: com.company.users
+? Test type:
+❯ controller
+  service
+  dao
+? Module type:
+❯ rest
+  service
+  dao
+```
+
+#### Custom Output Directory
+
+```bash
+ff sb gt UserController \
+  --api-name users-api \
+  --package com.company.users \
+  --type controller \
+  --module rest \
+  --out-dir /custom/path
+```
 
 ---
 

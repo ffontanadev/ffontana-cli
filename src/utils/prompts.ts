@@ -1,19 +1,58 @@
 import prompts from 'prompts';
+import path from 'path';
+import os from 'os';
+import fs from 'fs-extra';
 import type { Framework, StyleFormat } from '../types/index.js';
+import { dirExists } from './file-system.js';
+import { loadConfig } from '../core/config-loader.js';
+
+/**
+ * Get user templates if they exist
+ */
+async function getUserTemplates(): Promise<Array<{ title: string; value: string }>> {
+  try {
+    const config = await loadConfig();
+    const defaultDir = path.join(os.homedir(), '.config', 'ff-cli', 'user-templates');
+    const userTemplatesDir = config.userTemplatesDir ?? defaultDir;
+
+    if (!(await dirExists(userTemplatesDir))) {
+      return [];
+    }
+
+    const entries = await fs.readdir(userTemplatesDir, { withFileTypes: true });
+    const directories = entries.filter((entry) => entry.isDirectory());
+
+    return directories.map((dir) => ({
+      title: `${dir.name} (custom)`,
+      value: `user:${dir.name}`,
+    }));
+  } catch {
+    return [];
+  }
+}
 
 /**
  * Prompt for project template selection
  */
 export async function promptTemplate(): Promise<string> {
+  // Get built-in templates
+  const builtInTemplates = [
+    { title: 'React + Vite (TypeScript)', value: 'react-ts' },
+    { title: 'Next.js (App Router)', value: 'nextjs-app' },
+    { title: 'Lit (Web Components)', value: 'lit-component' },
+  ];
+
+  // Get user templates
+  const userTemplates = await getUserTemplates();
+
+  // Combine templates
+  const allTemplates = [...builtInTemplates, ...userTemplates];
+
   const response = await prompts({
     type: 'select',
     name: 'template',
     message: 'Select a project template:',
-    choices: [
-      { title: 'React + Vite (TypeScript)', value: 'react-ts' },
-      { title: 'Next.js (App Router)', value: 'nextjs-app' },
-      { title: 'Lit (Web Components)', value: 'lit-component' },
-    ],
+    choices: allTemplates,
   });
 
   return response.template as string;

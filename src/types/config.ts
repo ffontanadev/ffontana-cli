@@ -105,6 +105,7 @@ export const FFConfigSchema = z.object({
   tasks: TasksConfigSchema.optional(),
   templates: TemplatesConfigSchema.optional(),
   hooks: HooksConfigSchema.optional(),
+  userTemplatesDir: z.string().optional(),
 });
 
 export type FFConfig = z.infer<typeof FFConfigSchema>;

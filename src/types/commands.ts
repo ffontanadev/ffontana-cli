@@ -100,6 +100,16 @@ export interface ConfigCommandOptions extends CommonCommandOptions {
 }
 
 /**
+ * Add template command options
+ */
+export interface AddTemplateOptions extends CommonCommandOptions {
+  /** Template name (override auto-detection) */
+  name?: string;
+  /** Force overwrite if template exists */
+  force?: boolean;
+}
+
+/**
  * Command execution context
  */
 export interface CommandExecutionContext {
